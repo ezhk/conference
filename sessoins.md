@@ -1,18 +1,18 @@
 # Expedia
-[Styx](https://github.com/Hotelsdotcom/styx)
+[Styx](https://github.com/Hotelsdotcom/styx)<br />
 
-Web-resource is more harder every year,
-system bigger and need to recreate system.
+Web-resource is more harder every year,<br />
+system bigger and need to recreate system.<br />
 
 Evolution:
 - akamai frontend
 - akamai > nginx frontends
 - styx: each node on jvm: non-blocking IO
 
-**Styx** scheme:
-contains end-point router and a lot of plugins before it.
+**Styx** scheme:<br />
+contains end-point router and a lot of plugins before it.<br />
 
-Arch: Akamai switching data on node.
+Arch: Akamai switching data on node.<br />
 Inner edge:
 - styx routing
 - auth/bot managment
@@ -25,19 +25,19 @@ Routing:
   - end-point resolution (like a path)
   - application resolution (http://www.clara-rules.org/)
 
-Routing might use threshold breaker value.
+Routing might use threshold breaker value.<br />
 Bot treatments:
 - recaptcha
 - tarpit
 - blackhole
 - DOM mangling
 
-Bot classification works in bot score and cassandra database data.
-If it's bot, cassandra call recaptcha.
+Bot classification works in bot score and cassandra database data.<br />
+If it's bot, cassandra call recaptcha.<br />
 
-Consul using like an orchestrator engine and managing cloud-gate-proxy.
-Cloud-gate-proxy is styx. lobot is mechanism, that support persistence
-data for user, like a sharing if.
+Consul using like an orchestrator engine and managing cloud-gate-proxy.<br />
+Cloud-gate-proxy is styx. lobot is mechanism, that support persistence<br />
+data for user, like a sharing if.<br />
 
 Bot detection:
 - voight-kampff
@@ -63,40 +63,40 @@ Tracing: uses haystack.
 > How can we define and reason about capacity?
   Look at utilization increasing, nut it's not linear.
 
-Ideal scaling is linear, we've added node and get equal
-throughtput like a one node. It's not cheaped.
+Ideal scaling is linear, we've added node and get equal<br />
+throughtput like a one node. It's not cheaped.<br />
 Math:
 
     x(N) = lambda * N/1
 
-But our cluster isn't perfect.
-We need to use parallel queues for tasks (e.g. scatter-gather).
+But our cluster isn't perfect.<br />
+We need to use parallel queues for tasks (e.g. scatter-gather).<br />
 So our math:
 
     x(N) = lambda * N / (1 + omega * (N-1))
     where omega is fraction, that can't be done in parallel
 
-Sometimes our workers have depencies on each other,
-it's add delay, do more work:
+Sometimes our workers have depencies on each other,<br />
+it's add delay, do more work:<br />
 N workers = N(N-1) pairs, and now we got:
 
     x(N) = lambda * N / (1 + omega * (N-1) + kappa * N * (N-1)),
     kappa - penalty coef (the slowest factor)
 
-How does degradation works:
+How does degradation works:<br />
 [calc](https://www.desmos.com/calculator/3cycsgdl0b)
 
 So scalability is:
 
     x(N) = lambda * N / (1 + omega * (N-1) + kappa * N * (N-1))
 
-Load is concurrency - number of reqs in progress.
+Load is concurrency - number of reqs in progress.<br />
 Easy to measure: sum(latency)/interval
 - MySQL: show status like 'Threads_running'
 - Apache: active worker count
 
-The USL can reveal the workload failure boundary approaching.
-This framework is for making systems look really bad.
+The USL can reveal the workload failure boundary approaching.<br />
+This framework is for making systems look really bad.<br />
 
 Concurrency vs Lattency is good metric, and is quite useful.
 
@@ -113,10 +113,10 @@ Concurrency vs Lattency is good metric, and is quite useful.
 
 
 # DDoS wargames
-NS1 have DNS server whole world, anycast IP space.
-Single attacker hits single POP.
+NS1 have DNS server whole world, anycast IP space.<br />
+Single attacker hits single POP.<br />
 
-Distributed DDoS: need granular visibility and mitigation tools.
+Distributed DDoS: need granular visibility and mitigation tools.<br />
 DNS attacks:
 - random label, asda32.foo.com
 - reflection amd amplification (DNS and NTP), cpsc.gov
@@ -177,21 +177,21 @@ https://github.com/ns1
 
 
 # Make loadbalancing great again
-https://traefik.io/
-https://emilevauge.github.io/velocityLondon2017/
+https://traefik.io/<br />
+https://emilevauge.github.io/velocityLondon2017/<br />
 
-Microservices architecture is a new type
-of services like a dynamic, configuration
-change eberytime.
-Reverse proxy make possible to manage traffic
-into microservices, different types - web, api, dns, etc
+Microservices architecture is a new type<br />
+of services like a dynamic, configuration<br />
+change eberytime.<br />
+Reverse proxy make possible to manage traffic<br />
+into microservices, different types - web, api, dns, etc<br />
 
-As example reverse proxy might be is Nginx.
-But we need upadte nginx confs with update of
-our apps — it's not too easy (need sync).
+As example reverse proxy might be is Nginx.<br />
+But we need upadte nginx confs with update of<br />
+our apps — it's not too easy (need sync).<br />
 
-Traefic has API from microserfices, when
-microserfice might change treafik config.
+Traefic has API from microserfices, when<br />
+microserfice might change treafik config.<br />
 
 Features:
 - single binary
@@ -204,7 +204,7 @@ Features:
 - websockets
 - HTTP/2
 
-SSL intergrated with let's encrypt.
+SSL intergrated with let's encrypt.<br />
 What's new:
 - **session affinity**
 - cluster mode
@@ -224,8 +224,8 @@ What's new:
 
 
 # Continuous performance engineering (CPE)
-Rapid delivery of change is critical to business survival.
-Immediacy is the expectation for perfomance, but increaing
+Rapid delivery of change is critical to business survival.<br />
+Immediacy is the expectation for perfomance, but increaing<br />
 rate of change means more risk of breaking performance:
 - no time for traditional testing
 - problems cat remain dormant until next peak
@@ -266,11 +266,11 @@ Cost of bug is growing from concept (> developing > testing >) to producion.
 
 
 # Scaling up your monitoring
-Metrics > Dashboard > Alerts
+Metrics > Dashboard > Alerts<br />
 
-How to fix a lot of alerts and graphs?
-[Refocus](https://github.com/salesforce/refocus) tools presented as graph with blocks.
-We may use tree view or block, we've filters.
+How to fix a lot of alerts and graphs?<br />
+[Refocus](https://github.com/salesforce/refocus) tools presented as graph with blocks.<br />
+We may use tree view or block, we've filters.<br />
 
 [Argus](https://github.com/salesforce/argus) is a time-series monitoring and alerting platform.:
 - alerts
@@ -279,7 +279,7 @@ We may use tree view or block, we've filters.
 - data
 - manage via REST
 
-[Pyplyn](https://github.com/salesforce/Pyplyn) is tool that extracts data from various sources,
+[Pyplyn](https://github.com/salesforce/Pyplyn) is tool that extracts data from various sources,<br />
 transforms and gives it meaning, and sends it to other systems for consumption:
 - process metrics from multi sources
 - JSON data presentation
@@ -287,7 +287,7 @@ transforms and gives it meaning, and sends it to other systems for consumption:
 
 
 # Online performance analysis
-[Strymon](http://strymon.systems.ethz.ch/) is a system for predictive datacenter
+[Strymon](http://strymon.systems.ethz.ch/) is a system for predictive datacenter<br />
 analytics and management via queryable online simulations:
 - queries
 - complex analytics
@@ -305,13 +305,14 @@ Hard to troubleshoot:
 - many tasks, activities, depencies
 - bottleneck csuses are usually not isolated
 
-Here and next talking about parallel execution in programm.
-(Critical participation)[http://strymon.systems.ethz.ch/critical_path.html]:
-estimation in the critical path of programm activity
-CP = C(a) * aw / N(te-ts),
-  C(a) - centrality: the number if paths this activity appears on
-  aw - activity duration: edge weight
-  N - total number paths between times t.end and t.start
+Here and next talking about parallel execution in programm.<br />
+(Critical participation)[http://strymon.systems.ethz.ch/critical_path.html]:<br />
+estimation in the critical path of programm activity<br />
+**CP = C(a) * aw / N(te-ts)**
+
+    C(a) - centrality: the number if paths this activity appears on
+    aw - activity duration: edge weight
+    N - total number paths between times t.end and t.start
 
 Snailtrail CP-based summary:
 - activity type, here we're talking
@@ -349,9 +350,9 @@ Request errors:
   - network problems
 - transform error to client friendly messages
 
-It our origin location is dropped, then we're switching
-our traffic into cloud storage at CDN point.
-Also good idea — detect bot on your CDN location.
+It our origin location is dropped, then we're switching<br />
+our traffic into cloud storage at CDN point.<br />
+Also good idea — detect bot on your CDN location.<br />
 
 Possible errors:
 - origin infrastruct error: CDN might not catch
@@ -384,9 +385,9 @@ Failover *good* use cases:
 
 
 # Sketching data structures
-Algoryth efficiency:
-  error probability (more higher in probabilistyc algo)
-  vs implementation complexity.
+Algoryth efficiency:<br />
+  error probability (more higher in probabilistyc algo)<br />
+  vs implementation complexity.<br />
 
 What are sketches:
 - probabilistic algorithms
@@ -403,49 +404,49 @@ Estimator may works with:
 - presence (is the bit set?)
 - order statistics (smallest value seen so far)
 
-**Bloom filter** is a space-efficient probabilistic data structure,
-that is used to test whether an element is a member of a set.
-+ denote read stories
+**Bloom filter** is a space-efficient probabilistic data structure,<br />
+that is used to test whether an element is a member of a set.<br />
++ denote read stories<br />
 
-Hash convert to *bitmap* and test it for presence.
+Hash convert to *bitmap* and test it for presence.<br />
 But collisions are possible, error rates:
 
     (1 - e^(-k*n/m))^k
 
-+ no false negatives
-+ small memory footprint
-- small false positive rate
-- catn't retrieve or delete items
++ no false negatives<br />
++ small memory footprint<br />
+- small false positive rate<br />
+- catn't retrieve or delete items<br />
 
 Extentions:
 - counting
 - count-min sketch
 
-**Hyper Log Log**  s the observation that the cardinality of a multiset
-of uniformly distributed random numbers can be estimated by calculating
-the maximum number of leading zeros in the binary representation of each number in the set.
-+ denote read stories
-+ count unique words used
+**Hyper Log Log**  s the observation that the cardinality of a multiset<br />
+of uniformly distributed random numbers can be estimated by calculating<br />
+the maximum number of leading zeros in the binary representation of each number in the set.<br />
++ denote read stories<br />
++ count unique words used<br />
 
-Algo used bit data patterns.
+Algo used bit data patterns.<br />
 Error rates:
 
     log2 log2 Nmax + O(1)
     it's about 2% of errors
 
-+ uniform distributions
-+ log! log! space!
-+ commutativity
++ uniform distributions<br />
++ log! log! space!<br />
++ commutativity<br />
 
-**t-digest** construction algorithm uses a variant of 1-dimensional
-k-means clustering to produce a data structure that is related to the Q-digest.
+**t-digest** construction algorithm uses a variant of 1-dimensional<br />
+k-means clustering to produce a data structure that is related to the Q-digest.<br />
 This t-digest data structure can be used to estimate quantiles or compute other rank statistics.
 + denote read stories
 + count unique words used
 + estimate percentiles
 
-Algo is CDFs.
-Error rate is non constant.
+Algo is CDFs.<br />
+Error rate is non constant.<br />
 
 Pipelines in production
 - veneur
@@ -465,5 +466,5 @@ Brief list of others sketchers:
 - cardinality: hyperloglog
 - geometric data: coresets, locality-sensitive hashing
 
-Error is tradeoff in algorithms.
+Error is tradeoff in algorithms.<br />
 Approximations are often good enough and a hell of a lot cheaper.
