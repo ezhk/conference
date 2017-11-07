@@ -271,10 +271,10 @@ kubectl работает также с apiserver.
   поэтому каждый запрос получим 6 обращений — nsdomain и A запросы)
 - деградация, когда свыше 100 pod на хосте:
 
-    $ kubectl get pods
-    ...
-    status
-    container creating
+      $ kubectl get pods
+      ...
+      status
+      container creating
 
   в логах при этом operation timeout: context deadline exceeded.<br />
   Приняли решение разбивать хосты: запуск vms как k8s worker nodes.<br />
@@ -287,9 +287,11 @@ kubectl работает также с apiserver.
   - rate ошибок по запросам
 - kube-dns:
   - dnsmasq: кеш перед kube-dns
-    $ ps axuww
-    ...
-    dnsmasq --cache-size 5000
+
+        $ ps axuww
+        ...
+        dnsmasq --cache-size 5000
+
 - kubelet:
   - rate запросов и ошибок
 
