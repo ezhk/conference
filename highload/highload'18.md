@@ -184,8 +184,53 @@ Linux tracing infrastructure:
 Более высокоуровневый интерфейс — [ply](https://github.com/iovisor/ply)
 
 ### eBPF: exporting architecture
-[eBPF exporter DOC](https://blog.cloudflare.com/introducing-ebpf_exporter/)
+[eBPF exporter DOC](https://blog.cloudflare.com/introducing-ebpf_exporter/)  
 [eBPF exporter github](https://github.com/cloudflare/ebpf_exporter)
 
 ### Future
 [Bpftrace](http://www.brendangregg.com/blog/2018-10-08/dtrace-for-linux-2018.html)
+
+
+## Платформа 4К-стриминга на миллион онлайнов
+In format: RTMP, webRTC, OKMP.  
+Upload out format: RTMP.
+
+Видео: раз с каким-то интервалом выделяется опорный кадр, а дальше отправляются только diff-ы. Изначально использовали FFMPEG, транспонирование для 64FPS сумела только Nvidia P4.
+
+FFMPEG: 2160p > Decoder >4K> rescaler (1440p, 1080p, etc) > encode (1440p, 1080p, etc), но решили сначала 4К скейлить к 2К и дальше его отправлять на rescaler.  
+Чтобы поскейлить:
+
+- запустить несколько decoder-ов
+- сделать свой transcoder (что и сделал ОК)
+
+CPU vs GPU:
+
+- GPU выше FPS
+- CPU выше throughput
+
+Ffmpeg — NVENC:
+
+- не копируй память
+- rescale на GPU
+- CUBA свободна
+
+Балансировка на CPU/GPU с учетом веса.  
+Общая схема обработки запросов: 
+Transform > Segmenter (упаковывает потоки в контейнеры) > Download.
+
+HLS, ffmpeg-dash — возможность динамического изменения качества, подменяется следующий опорный карты. У HLS есть оверхед пакетов для 40Gb/sec — несколько десятков млн PPS.
+
+NGINX при проксировании вносил 500ms delay на выдачу: от wait_time при кеширования proxy_cache — [bug report](https://forum.nginx.org/read.php?21,278731).
+
+Tuning:
+
+- проверить SO_RCVBUF и net.ipv4.tcp_wmem
+- congestion control и выбор стартового окна: высокий packet loss очень влияет на клиентов, default сейчас cubic, Google предложил BBR => net.ipv4.tcp_congestion_control = bbr, но jitter (отклонение задержек RTT) по-прежнему есть
+- использование QUIC
+
+Деградация сервиса:
+
+- throttler
+- убирать качество из плеера (но плеер должен уметь переизбирать манифест)
+
+
