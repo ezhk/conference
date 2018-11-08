@@ -112,7 +112,12 @@ IO stack:
 C 3.13 появился blk-mq, начинался как шедулер: давайте использовать для IO параллелизм, который умеет SSD, с использованием честных очередей, привязанных к ядрам CPU. Завязан на NVMe драйвер Linux.
 
 Старый подход:
-CPU > elevator queue > disk
+
+        CPUs
+        | | |
+    elevator queue
+          |
+         disk
 
 Новый подход:
 
@@ -132,5 +137,55 @@ CPU > elevator queue > disk
 
 - IO polling: появились быстрые SSD, раньше глубоко в драйвере срабатывал механизм «записи» и мы ожидали обработку прерывания, а SSD делает это быстро, поэтому появился механизм опроса о записи, мы сейчас не ждем блокирующий вызов об успешности записи, как раньше
 - new IO schedulers Cyber and BFQ
-- IO tagging, ввод от предельного приложения можно затегать и дать определенный приоритет 
+- IO tagging, ввод от предельного приложения можно затегать и дать определенный приоритет
 - direct IO improvements (в prostgres это пока не поддерживается — только для WAL без репликации)
+
+
+## eBPF для анализа производительности в Linux
+eBPF — extended Barley packet filter, пошло всё это с создания файрволов: в 1992 ребята из Berkley написали вирт. машину с быстрой пакетной фильтрацией. Дальше решили,  что это неплохой Фреймворк для event processing-а.
+
+eBPF интергрирован в систему тулзов «perf».
+Несколько тезисов:
+
+- Есть байт-код eBPF, который можно загрузить в ядро.
+- Программа проверяется на размер, что нет бесконечных случайных циклов и пр.
+- Для LLVM clang есть target для eBPF.
+- Компиляция и загрузка eBPF программ зависит от ядра, поэтому компилятор при запуске.
+
+[__eBPF tracing tools__](http://www.brendangregg.com/ebpf.html)  
+[User space vs Kernel](http://www.brendangregg.com/eBPF/linux_ebpf_internals.png)
+
+Инструментарий:
+
+- трейс: [Linux tracing systems](https://jvns.ca/blog/2017/07/05/linux-tracing-systems/)
+- сэмплинг, можем посмотреть статус системы, посмотреть CPU performance counters
+
+Linux tracing infrastructure:
+
+- type of kernel interface: kProbe, etc
+- eBGP code to prepare data
+- perf tools, that collect data
+
+### eBPF: active metrics
+[Набор tools](http://www.brendangregg.com/eBPF/tracing_quadrant_jul2018.jpg):
+
+- lovisor/bcc
+- lovisor/ply
+- perf-tools-unstable
+
+Набор инструментов:
+
+    echo "deb [trusted=yes] https://repo.iovisor.org/apt/bionic bionic main" | sudo tee /etc/apt/sources.list.d/iovisor.list
+    apt-get update
+    apt-get install bcc-tool
+    cd /usr/share/bcc/tools/
+    ./tcpretrans
+
+Более высокоуровневый интерфейс — [ply](https://github.com/iovisor/ply)
+
+### eBPF: exporting architecture
+[eBPF exporter DOC](https://blog.cloudflare.com/introducing-ebpf_exporter/)
+[eBPF exporter github](https://github.com/cloudflare/ebpf_exporter)
+
+### Future
+[Bpftrace](http://www.brendangregg.com/blog/2018-10-08/dtrace-for-linux-2018.html)
