@@ -285,7 +285,7 @@ Jupyter — стандарт для ML где в одном интерфейсе
 - [uwsgi_tasks](https://github.com/Bahus/uwsgi_tasks):
 - celery
 - rq
-- [dramatiq](https://dramatiq.io) — как продолжение celery, заточек на производительность
+- [dramatiq](https://dramatiq.io) — как продолжение celery, заточен на производительность
 
 Redis тоже может быть как message broker и более производителен, чем rabbitmq с celery.  
 Используют:
