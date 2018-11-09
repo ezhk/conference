@@ -365,3 +365,125 @@ Best practices with system changes:
 - package configs, binary, shared libs hermetically together
 - use canary deployment
 
+Caches
+
+- hides requests volume
+- wort great on static content
+- introduces data inconsistency
+
+
+Key take-aways:
+
+- ensure x-stack observebility
+- user l7 LB
+- use autoscaling (V/H, pods/clusters)
+- use externally consistent DBs
+
+
+## Кластер Kubernetes в твоём ноутбуке. Знакомство с minikube
+[kubeshop](https://github.com/viteksafronov/kubeshop)
+
+$ kubectl config get-contexts
+
+    CURRENT   NAME       CLUSTER    AUTHINFO   NAMESPACE
+    *         minikube   minikube   minikube
+
+$ kubectl get pods
+
+    No resources found.
+
+$ kubectl get pods -n kube-system
+
+    NAME                                    READY   STATUS    RESTARTS   AGE
+    coredns-c4cffd6dc-zhcmg                 1/1     Running   1          36m
+    etcd-minikube                           1/1     Running   0          8m
+    kube-addon-manager-minikube             1/1     Running   1          36m
+    kube-apiserver-minikube                 1/1     Running   0          8m
+    kube-controller-manager-minikube        1/1     Running   0          8m
+    kube-dns-86f4d74b45-fxgs6               3/3     Running   4          36m
+    kube-proxy-pgvzk                        1/1     Running   0          7m
+    kube-scheduler-minikube                 1/1     Running   0          8m
+    kubernetes-dashboard-6f4cfc5d87-98264   1/1     Running   3          36m
+    storage-provisioner                     1/1     Running   3          36m
+
+
+## From Ansible to SaltStack - как и зачем
+[Попробовать salt у себя](https://github.com/saltstack/salt-bootstrap)  
+
+Проблемы ansible:
+
+- масштабируемость
+- поддержка актуальности
+- версионирование
+- разделение прав
+- аутентификация
+
+Salt:
+
+- pull-модель из коробки (ansible только push)
+- REST-api
+- LDAP, разделение прав
+- деплортивный подход — __что__ хотим получить
+- императивный — __как__ хотим получить
+
+На хостах устанавливается minion и подключается на порт 4505 мастера, результат определяет на порт 4506.  
+Salt master имеет pillars — параметры раскатки на миньонах, миньон собирает список статичной информации о себе и отправляет их на мастер — grains.
+
+State apply — процесс синхронизации состояния на миньонах со стороны мастера.
+
+Ansible:
+
+- нет агентов
+- источник информации — управляющая машина
+- inventory и playbook-м
+- roles
+- в качество основного протокола — ssd
+
+Salt:
+
+- настройка через агенты и их особенности:
+    + pull-модель
+    + информация о хоста
+    + расширяемость
+    - выше порог входа
+    - сложно разрабатывать
+- есть сервер, откуда берется информация
+- pillar и top.sls
+- states (скрипты, походы на роли ansible)
+- зашифрованный протокол
+
+С использованием salt можно посмотреть выполняемые задачи и исключена возможность запуска одновременных задач как в ansible. Но в последнем тоже есть pull-модель: ansible-pull, ansible-tower (non free).
+
+Авторизация salt-api с использованием external_auth модуля. Но модуль LDAP не позволяет авторизацию с multiple domains (базовый домен один, последний в списке) и плохо работает с кириллицей.  
+Ansible использует with_items вместо циклов и when в условиях, у salt несколько беднее — меньше фильтров, в последнем в качестве шаблонов — jinja.  
+Salt раскатывает быстрее ansible.
+
+Ansible оперирует fail_hard — ошибка в одной части шаблона = остановке всего шаблона, у salt fail_fast по умолчанию — выполнение до конца при падении части таски (можно установить при этом fail_hard на конкретный критичный таск).  
+В ansible менее удобны проверки условия шагов — в failed_when надо сравнивать значение с переменной, в которую нужно сначала что-то записать, у salt всё удобнее на примере cmd.run — stateful.
+
+Последовательность запуска:
+
+- require
+- order
+- watch
+
+Salt-API — веб-обертка над командой salt, которая выполняется на мастере.  
+Что делают с его помощью:
+
+- авторизация пользователей (POST /login)
+- получение состояния миньонов
+- выполнение команды на миньоне (POST /run)
+
+Почему не везде salt:
+
+- кастомная конфигурация инфраструктуры сервиса
+- deploy в marathon
+- deploy инфраструктуры разработки
+- проблема курицы и яйца: чем катать Salt?
+
+
+Итог:
+
+- salt идеален для раскатки базовой инфраструктуры
+- для CI/CD лучше ansible
+- salt не смог «убить» ansible
