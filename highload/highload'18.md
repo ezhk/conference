@@ -245,7 +245,7 @@ Simple HTTP:
     > A
     > ClientHello
     < Server Hello
-    > Change CipherSpec
+    > ChangeCipherSpec
     < ChangeCipherSpec
     > GET
     < Content
@@ -291,4 +291,77 @@ CDB как хранилище данных — неизменяемая и оч�
 
 Dogfooding: если бы мы производили собачий корм, то были бы настолько уверены в его качестве, что если бы сами.  
 При прохождении запросов с Unbound в TinyDNS мы тоже не знаем откуда пришел запрос — от пользователя или из корпоративного DNS (в итоге раньше разделяли всё инфраструктуру внутреннего и внешнего DNS). Не так давно появился EDNS — клиент или рекурсивный сервер добавляют клиентскую подсеть в DNS пакет (like a X-Forwarded-For в HTTP). Теперь Unbound инжектирует EDNS и только потом отправляет запрос в TinyDNS.
+
+
+## Решение проблем высоконагруженной балансировки
+[Thrift-pool](https://github.com/qiwi/thrift-pool)
+
+ПИД регулятор — следим за временами ответа нод и при отклонениях времен ответов изменяем вес ноды:
+
+- пропорциональный
+- интегрирующий
+- дифференцирующий
+
+Большое количество автоколебаний для ПИД регулятора.  
+
+Ещё одна проблема балансировки — слишком большие пулы, когда очередь на входе накапливается на балансировщике, пока разбирается эта очередь — timeout на стороне клиента. Из-за этой очереди qiwi прилег на несколько часов, application не успевал обрабатывать накапливаемую очередь.  
+Тут можно уменьшить очередь, таким образом отбросив часть клиентов — отталкиваемся от обычных значений + 20% на всякие пики.
+
+Consistent hashing — как продолжение балансировки по ключу, в этом случае добавляют ноды много раз в кольцо хэшей, чтобы при выходе одной из ном была более равномерная балансировка.
+
+
+## Replicated service mesh
+Default scheme:
+
+    Ingress (LB) or global ingress (LBs) > FrontEnds > Mixer (going to Cache or Egress) > BackEnd > DB
+
+Service reliability goals:
+
+- satisfy all demand:
+    - capacity planning/provisioning
+    - making use of capacity
+- serve within error/latency budget (SLO)
+    - prevent/mitigate error/timeouts
+
+In-DC and x-dc LB:
+
+- why and when
+    - key to scalability
+    - equalize constrained resource utilization
+    - keep latency low
+- prefer L7 LB
+    - l7 fined load balancer granularity (HTTP/RPC req vs connection) and content basing routing
+    - l4 cheaper and appropriate for streams
+
+- waterfall by region (RTT based)
+- waterfall by order (prio/order based)
+- enables:
+    - location failover
+    - error averse assignments
+    - capacity sharing
+- prefer auto calculation and adjustment
+- isolation trade-off: blast-radius containment (safety) vs resource overprovisioning (money)
+
+Traffic blackholes solutions:
+
+- health checks / readiness probes
+- errors averse load assignment
+
+Overload preventative measures:
+
+- use flow control in existing framework (gRPC)
+- change canarying
+- careful change management: gradual changes rollout
+- know your system resources and behavior under overload
+- control client retry behavior
+- user server and client side throttling in work conserving mode
+- use horizontal and vert autoscaling
+- know autoscaling reaction speed
+- have dedicated hospital nodes
+
+Best practices with system changes:
+
+- config is code, treat as such
+- package configs, binary, shared libs hermetically together
+- use canary deployment
 
