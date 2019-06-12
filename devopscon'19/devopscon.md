@@ -132,3 +132,27 @@ Bash testing:
 
 [bash-completion](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)  
 [powerline go](https://github.com/justjanne/powerline-go)  
+
+# Open source pentesting and security analysis tools
+[Search vulnerabilities](https://www.cvedetails.com/)  
+[Exploit DB](https://www.exploit-db.com/)  
+[Vulnerable demo application](https://github.com/cschneider4711/Marathon)  
+
+Testing at first SQL injection:
+
+* add ' into username or search field as example
+* request get param add "OR 1=1"
+
+Cross-site scripting:
+
+* search zzzz`<u>zzzz</u>`zzz instead zzzzzzzzzz
+* try to add <script>alert(1);</script>
+* use `<script>` tags in create user page (`<title>` tag missing escaping, and add `"><script>alert(1)</script>` to close tag earlier)
+
+Check image location — here `URL.php?photo=defailt.png`, next step — check modified URL: `URL.php?photo=../../../../../../etc/password`.  
+
+Tools, that might help us:
+
+* __OWASP zed attack proxy__ ([ZAP](https://www.zaproxy.org/)) and add proxy into browser — for analyze requests, look into alert, there possible to search different errors. ZAP also support active scan (in background this add SQL injection).  
+
+Next step: using ZAP API in jenkins task, like a `curl -s URL/JSON/ascan...`. 
