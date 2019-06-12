@@ -127,4 +127,8 @@ Bash testing:
 }
 ```
 
-# How data beats gut feeling
+# kubectl hacking
+[source](https://github.com/loodse/kubectl-hacking)
+
+[bash-completion](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)  
+[powerline go](https://github.com/justjanne/powerline-go)  
