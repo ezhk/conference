@@ -264,3 +264,37 @@ features:
 - circuit breaker
 - rate limiting
 - cache
+
+# Seven security sins
+
+Threat modeling tools:
+
+- microsoft threat modeling tool (TMT)
+- diagram oriented tools
+- etc.
+
+Do it:
+
+1. Whiteboard hacking (read «OWASP testing guide», [checklist](https://www.owasp.org/index.php/Testing_Checklist))
+2. Security architecture (we need good crypto, leak DB is stupid; look at list of aws s3 leaks):
+    - don't use CBC anymore
+    - don't rely on java.util.Random for security relevant code use java.util.SecureRandom instead
+    - use vaults
+    - with microservices backend is not longer «fully trusted»: use HTTPS with PKI for backend request
+    - CIS Benchmarks of your products ([link](https://www.cisecurity.org/cis-benchmarks/))
+3. Security Automation — ZAP (or [FindBugs](http://findbugs.sourceforge.net/) plugin)
+    - DAST (dynamic app sec testing)
+    - SAST (static ..)
+    - interactive IAST — only commecrial good ones
+    - use git «secrets --scan-history»
+4. Offensive penetration tests
+5. Organozational changes
+     - security role in every team
+     - process responsibility
+     - security information hub
+     - security code review
+6. Continious training:
+     - knowing your enemy
+     - gamification (capture the flag)
+7. Breach preparation:
+     - assume breach
