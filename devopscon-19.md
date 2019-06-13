@@ -266,6 +266,7 @@ features:
 - cache
 
 # Seven security sins
+[OWASP_Top_10-2017-ru.pdf](https://www.owasp.org/images/9/96/OWASP_Top_10-2017-ru.pdf)  
 
 Threat modeling tools:
 
@@ -298,3 +299,5 @@ Do it:
      - gamification (capture the flag)
 7. Breach preparation:
      - assume breach
+     - logging & monitoring (use SIEM tools, Garbage-in-garbage-out, login failures, etc.)
+     - incident simulation drills
