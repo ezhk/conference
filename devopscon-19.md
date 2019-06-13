@@ -156,3 +156,47 @@ Tools, that might help us:
 * __OWASP zed attack proxy__ ([ZAP](https://www.zaproxy.org/)) and add proxy into browser — for analyze requests, look into alert, there possible to search different errors. ZAP also support active scan (in background this add SQL injection).  
 
 Next step: using ZAP API in jenkins task, like a `curl -s URL/JSON/ascan...`. 
+
+# DevSecOps
+[checkmarx products](https://www.checkmarx.com/products/)
+
+Main thread about how it's important to check your softvare for vulnerabilities:
+
+- static analyze code
+- penTesting (dynamic testing); here testing framework: telerik, ranonex, tricents
+
+So full cycle:
+
+- DEV:
+  - design
+  - code
+  - check-in
+  - build
+  - test/QA
+- OPS:
+  - deploy
+  - operate
+  - monitor
+    - run security checks, validate product state
+
+Agile process:
+
+- discovery
+  - discovery
+  - setup
+  - user managment
+- intergrate
+  - project onboarding
+  - SDLC intergration
+  - reporting intergration
+  - tracking intergration
+  - training
+- operate
+  - hosting operation
+  - results review
+  - appSec helpdesk
+- review
+  - program mgt
+  - KPI review
+
+Operate and review are appSec levels.
