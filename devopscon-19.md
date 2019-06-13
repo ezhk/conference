@@ -200,3 +200,67 @@ Agile process:
   - KPI review
 
 Operate and review are appSec levels.
+
+# Hystrix vs Istio
+[Circuit breaker](https://microservices.io/patterns/reliability/circuit-breaker.html)  
+[Slides](https://www.exoscale.com/syslog/istio-vs-hystrix-circuit-breaker/)  
+
+Options of circuit strategy:
+
+- number of failed calls
+- elapsed time strategy
+  - fixed
+  - doubling
+  - somethong else
+- number of successful calls
+
+E-commerce will be the next as example.
+
+Logging:
+
+- fire-and-forget
+  - async calls
+
+Recommendations:
+
+- sync req/response
+- optional
+- fallback options
+  - display no recommendations
+  - static recomendation set
+
+Pricing:
+
+- sync req/responce
+- required
+  - but better sell at a slightly ourdated price!
+- fallback options
+
+Payment:
+
+- sync req/responce
+- required
+- fallback:
+  - accept potentially bad payments
+
+Strategies:
+
+- black box
+  - implementations
+    - proxies
+    - service meshes
+  - fits
+    - fail fast
+- white box
+  - libraries
+    - hystrix
+    - resilience 4J
+
+Istio is about service mesh.  
+  
+Resilience 4J is a lighweight fault tolerance library (Netflix hystrix), but designed for Java8;  
+features:
+
+- circuit breaker
+- rate limiting
+- cache
