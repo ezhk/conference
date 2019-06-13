@@ -301,3 +301,15 @@ Do it:
      - assume breach
      - logging & monitoring (use SIEM tools, Garbage-in-garbage-out, login failures, etc.)
      - incident simulation drills
+
+# Self service
+[link](https://www.rundeck.com/self-service)
+
+# Prometheus
+Timeline in a nutshell:
+- initial commit 2012-11-24
+- public announcement 2015-01-26
+- join kubernetes and 2nd project hosted by the CNCF (cloud native computing foundation) 2016-05-09
+- server v1.0 2016-07-18
+- server v2.0 2017-11-08
+- graduated within CNCF (2nd project and Kubernetes) 2018-08-09
