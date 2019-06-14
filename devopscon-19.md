@@ -1,12 +1,3 @@
-# Deploy miscroservices like a Ninja with Istio service mesh
-[Istio presentation](http://www.devopstrain.pro/istio/)  
-[Register](bit.do/istio1), auth code: 5CPL  
-
-Tiny running fix: microk8s.enable istio and answer «N».  
-
-    $ kubectl describe pod -l=app=httpbin
-    $ kubectl get pod httpbin-5c649bb49c-bfnvh -o yaml  
-
 # Silos
 3 ways of devops:
 
@@ -313,3 +304,104 @@ Timeline in a nutshell:
 - server v1.0 2016-07-18
 - server v2.0 2017-11-08
 - graduated within CNCF (2nd project and Kubernetes) 2018-08-09
+
+# Workshops
+
+## Deploy miscroservices like a Ninja with Istio service mesh
+[Istio presentation](http://www.devopstrain.pro/istio/)  
+[Register](bit.do/istio1), auth code: 5CPL  
+
+Tiny running fix: microk8s.enable istio and answer «N».  
+
+    $ kubectl describe pod -l=app=httpbin
+    $ kubectl get pod httpbin-5c649bb49c-bfnvh -o yaml  
+
+## CI/CD
+[author](https://www.manuelpais.net/)  
+[katacoda link](https://www.katacoda.com/manuelpais)  
+[laboratory](https://katacoda.com/manuelpais/courses/treating-your-pipeline-as-a-product)
+
+CI/CD evolution anti-patterns:
+- CD retrofitted into CI server
+  - CI = "using a CI server"
+  - little thought given to pipeline design
+  - tools in the chain get no love
+- Familiarity first
+  - Not using "best tool for the job"
+  - Stretching tools beyong their nature
+- "Not invented here" syndrome
+  - hard to evolve home-grown tools
+  - tooling team(s) fear changes
+  - missing out on emergent good practices
+- scaling first
+  - not clear what "scaling" means
+  - too much / too early focud in standartization
+
+Over time issues arise...
+- scalability
+- intergration
+- evolvability
+- performance
+- resilience
+- bad coding/scripting practives
+
+Sometimes delivart becomes bottleneck.  
+
+Delivery (CI/CD) systems:
+- CI tool
+- CD tools (orhestration)
+- plugins / third party tools
+- pipeline definitions
+- source repos
+- artifact repos
+- CI/CD infrastructure
+
+Practives for resiliency:
+- CI/CD immutable infrastructure
+- blue-green deployments of updates
+- pipeline configuration-as-code
+- application infrastructure-as-code
+- aggregated logging
+- monitoring & alerting
+- auto-scaling
+
+Fast(er) feedback loops:
+- build + unit tests under 5 minutes
+- full pipeline run under 1 hour
+- alert in deviations (above AND below)
+- wait times highlighted
+
+Practised for fast feedback:
+- parallelize whenever possible
+- dunamyc test environment / scheduling (fail quickly)
+- measure activity times/deviations
+- focud on flow efficiency (remove longest bottleneck first)
+
+> «If your architecture doesn't fudamentally support Continious Delivery, then you're going nowhere.» 
+
+Use small work items (batch size) for faster feedback loops.
+
+Old view of the wirld: 
+
+    |-------------------time between failures-------------------|  
+                  |---------time to repair---------|  
+
+New view of the wirld:
+
+    |---------time between failures---------|  
+              |--time to repair--|  
+
+Pipeline design:
+- intergration tests
+- functional tests
+- performance tests
+- complience acceptance
+- change approval board
+- PROD
+
+Tools:
+- [jenkins](https://jenkins.io/) — builder
+- [artifactory](https://jfrog.com/artifactory/) — storage container
+- [SonarQube](https://www.sonarqube.org/) — static analyze code
+- [cAdvisor](https://github.com/google/cadvisor) — resource monitoring
+- [kibana](https://www.elastic.co/products/kibana) — UI log analyzer
