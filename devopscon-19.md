@@ -319,7 +319,9 @@ Tiny running fix: microk8s.enable istio and answer «N».
 ## CI/CD
 [author](https://www.manuelpais.net/)  
 [katacoda link](https://www.katacoda.com/manuelpais)  
-[laboratory](https://katacoda.com/manuelpais/courses/treating-your-pipeline-as-a-product)
+[laboratory](https://katacoda.com/manuelpais/courses/treating-your-pipeline-as-a-product)  
+[cd-pipeline](https://github.com/SkeltonThatcher/releasability-book/tree/master/examples/cd-pipeline)  
+[pipeline-as-code](https://github.com/manupaisable/pipeline-as-code)
 
 CI/CD evolution anti-patterns:
 - CD retrofitted into CI server
