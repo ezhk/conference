@@ -312,3 +312,29 @@ Tempesta FW:
 - Cloudflare PicoHTTPParser AVX2 extension (работает в среднем в 2 раза быстрее стандартного PicoHTTPParser)
 
 PicoHTTPParser может просустить символ, недопустимый по RFC.
+
+## Надежность сервисов FB
+
+Используют Scuba для отрисовки метрик (вроде своего ELK):
+
+- /proc
+- netcons/dmesg
+- coredumps + stacktraces
+- perf, BPF
+- memcache, mysql client libraries
+- PHP exceptions
+
+Cubism.js — JS-библиотека от Square для отрисовки стековых графиков — очень легко искать корреляцию.  
+
+Есть отдельный incedent manager portal, куда сваливаются все инциденты и специальный менеджер организовывает людей при высоком уровне emergency.  
+
+Tools:
+
+- Cubism — monitoring dashboard
+- FBAR — auto remediation
+- Coredumper — monitoring memory tools
+- SEV Manager — incident manager UI
+- Cyborg — host provisioning
+- Kobold — cluster provisioning automation
+- ...
+
