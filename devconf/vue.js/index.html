@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<template>
+    <div>
+        <div v-for="item in evenTimes" class="some-class" :key="item">
+            <!--это логику лучше делать в JS, см computed-->
+            <span v-if="item % 2 === 0">{{ item }}</span>
+        </div>
+
+        <!--<input type="text" v-model="newName">-->
+        <!--<input type="button" @click="add" value="add"/>-->
+        <!--
+            <input type="text" @input="$emit('variable', $event.target.value)" :value="value"/>
+            <Test @variable="title = event.target.value"/>
+        -->
+    </div>
+</template>
+
+<script>
+    import Vue from 'vue'
+
+    class Item {
+        constructor(id, name) {
+            this.id = id;
+            this.name = name;
+        }
+    }
+
+    export default {
+        name: "Test",
+        data() {
+            return {
+                items: [1, 2, 3],
+            };
+        },
+        props: {
+            title: {
+                type: String,
+                required: true,
+            },
+        },
+        computed: {
+            evenTimes() {
+                return this.items.filter(item => item % 2 === 0);
+            }
+        },
+        methods: {
+            add(a) {
+                this.items = [...this.items, a];
+            }
+        },
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</body>
+</html>
