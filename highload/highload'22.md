@@ -1,5 +1,5 @@
 ## Go generics
-[Slides](https://bit.ly/gogenhl).
+[Slides](https://bit.ly/gogenhl).  
 Links:
 - [Go generics: the hard way](https://github.com/akutz/go-generics-the-hard-way)
 - [Лекция от создателей дженериков](https://www.youtube.com/watch?v=Pa_e9EeCdy8)
